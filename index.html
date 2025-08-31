@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+ 
+    <title>Fragenkatalog</title>
+
+</head>
+<body>
+  <h1>Wie gut kennst du mich oder dich selbst?</h1>
+  <div class="container">
+    <div class="input-group">
+      <div class="frage-box" id="frageBox">
+        <br>
+        <p class="zeilenFrage"> Gib eine Zahl ein oder wähle eine Zufallsfrage! </p>
+      </div>
+      <div class="frageNummer">
+        <label for="nummerInput">Fragen-Nummer:</label><br>
+        <input type="number" id="nummerInput" min="1" placeholder="z.B. 42">
+        
+      </div>
+    </div>
+    
+    <button onclick="zeigeFrage()">Zeige die Frage</button>
+    <button onclick="zufallsFrage()">Zufallsfrage</button>
+  </div>
+
+<div>
+  <button class="accordion">Alle Fragen</button>
+  <div class="panel">
+    <div id="fragenGrid" class="grid"></div>
+  </div>
+</div>
+
+
+  <script>
+    const fragen = [
+      "Wenn ich im Lotto gewinnen würde, was würde ich mit dem Geld machen?",
+      "Was war der beste Tag meines Lebens? Was war der schlechteste Tag meines Lebens?",
+      "Wer ist derzeit mein Crush?",
+      "Bin ich eine Android- oder iPhone-Person?",
+      "Wobei fühle ich mich stets lebendig?",
+      "Wo sehe ich mich in 5 Jahren?",
+      "Wonach bin ich süchtig?",
+      "Was mache ich gerne am Wochenende?",
+      "Habe ich jemals einen Preis gewonnen?",
+      "Wie viel Geld gebe ich jede Woche aus?",
+      "Was ist mein Lieblingssport?",
+      "Was ist meine größte Angst?",
+      "Mag ich es, unter neuen Leuten zu sein und sie kennenzulernen?",
+      "Was ist mein Lieblingsessen?",
+      "Was ist mein Lieblingsfilm?",
+      "Was ist meine Lieblingsserie?",
+      "Möchte ich mal Kinder haben? Wenn ja, wie viele?",
+      "Welche drei Dinge würde ich auf eine einsame Insel mitnehmen?",
+      "Wie sieht meine Morgenroutine aus?",
+      "Würde ich lieber auf dem Land leben oder in der Großstadt?",
+      "Was machen meine Eltern beruflich?",
+      "Stehe ich lieber früh oder spät auf?",
+      "Liebe ich es zu fliegen?",
+      "Ist Reisen mein Ding?",
+      "Liebe ich das Leben?",
+      "Liebe ich meinen Beruf?",
+      "Gibt es Dinge, die ich mir unbedingt wünsche?",
+      "Würde ich jemals in ein Sommercamp gehen?",
+      "Würde ich jemals aufhören, etwas zu machen, was sein muss, obwohl ich es nicht will?",
+      "Wie flexibel bin ich, wenn du Hilfe brauchst? Lasse ich alles stehen und liegen?",
+      "Kaufe ich unbedacht ein? Bin ich ein Overthinker?",
+      "Hatte ich während meiner Kindheit ein Haustier?",
+      "Liebe ich Tiere und würde ich meinen Kindern ein Haustier erlauben?",
+      "Wie stehe ich zum Thema Ehe?",
+      "Würde ich jemanden heiraten, der mich zu etwas zwingt?",
+      "Stell dir vor, ich komme zu dir und sage, dass mein Mann mich geschlagen hat. Was machst du?",
+      "Stell dir vor, mein Mann verdächtigt mich einer Affäre. Was machst du? Würdest du mir das zutrauen?",
+      "Was ist mein absolutes No-Go in einer Ehe und in einer Freundschaft?",
+      "Gibt es Dinge, die früher für mich gar nicht gingen, die ich jetzt gelassen sehe?",
+      "Ist es für mich ein Ding, wenn jemand vor mir prahlt? Wie reagiere ich?",
+      "Was war deine schönste sexuelle Erfahrung – und warum?",
+      "Gibt es etwas, was mich zum Ausrasten bringt?",
+      "Leben wir beide in zwei verschiedenen Welten oder eher nur in verschiedenen Ebenen?",
+      "Telefoniere ich gerne?",
+      "Mit wem telefoniere ich am liebsten?",
+      "Haben sich in den letzten Jahren einige Grundeinstellungen an mir verändert?",
+      "Gibt es eine Sache, die du an mir ändern würdest – welche wäre es?",
+      "Stört dich meine unruhige oder stressige Art manchmal?",
+      "Habe ich Ticks?",
+      "Wie löse ich Konflikte?",
+      "Wie sehe ich die Welt?",
+      "Wo würde ich in 5 Jahren sein?",
+      "Was ist mein Lieblingsfilmgenre und mein Lieblingsbuch?",
+      "Wie würde ich heißen, wenn ich meinen Namen ändern könnte?",
+      "Wohin möchte ich unbedingt reisen?",
+      "Welche Dinge nehme ich mir als Nächstes vor – beruflich und privat?",
+      "Was ist eine Sache, die ich hasse?",
+      "Wie denken andere über mich?",
+      "Wie wirkt mein Halo-Effekt?",
+      "Welche Sprachen spreche ich?",
+      "Wofür sollte ich dankbar sein?",
+      "Gibt es irgendwas, was ich nicht sehe?",
+      "Gibt es etwas, das dich beim Sex nervt oder ein No-Go für dich ist?",
+      "Welchen Dingen schenke ich zu wenig Aufmerksamkeit?",
+      "Was war das letzte Konzert, auf dem ich war?",
+      "Ist eine Freundschaft zwischen Mädchen und Jungen für mich ein Problem?",
+      "Würde ich jemals ein Kind adoptieren?",
+      "Welche politischen Orientierungen habe ich?",
+      "Habe ich jemals etwas gemacht, das unter meinem Niveau ist oder nicht zu mir passt?",
+      "Fällt es dir leicht, beim Sex über deine Wünsche zu sprechen?",
+      "Habe ich jemals meine Haare gefärbt? Welche Farbe möchte ich noch ausprobieren?",
+      "Was ist meine Lieblingsfarbe?",
+      "Wie sieht mein Hochzeitstag aus?",
+      "Wie stelle ich mir meinen Junggesellenabschied vor?",
+      "Würde ich jemals für den Staat arbeiten?",
+      "Sind mir Menschen um mich herum wichtig?",
+      "Bin ich extrovertiert oder introvertiert – und warum?",
+      "Wer hat den größten Einfluss auf mich?",
+      "Welche Eigenschaft würdest du mir gerne klauen und welche würdest du mir empfehlen?",
+      "Wenn wir uns früher getroffen hätten, wie wäre unsere Beziehung verlaufen?",
+      "Was machen wir zusammen, wenn wir 85 Jahre alt sind?",
+      "Welchen Beruf wollte ich als Kind ausüben?",
+      "Beschreibe mich in drei Wörtern.",
+      "Welche Berühmtheit würden wir in unsere Freundschaft aufnehmen?",
+      "Was lege ich auf meine Pizza?",
+      "Wie tröste ich mich an einem harten Tag?",
+      "Wer saugt in meinem Umfeld die meiste Energie von mir?",
+      "Wenn ich sterben würde, was würdest du von meinem Besitz haben wollen?",
+      "Wenn wir für einen Tag allein auf einer abgelegenen Insel wären – was würdest du mit mir machen?",
+      "Was bewunderst du an mir?",
+      "Wenn ich ein Tier wäre, welches Tier wäre ich?",
+      "Was würde ich als Erstes tun, wenn ich im Lotto gewinne?",
+      "Was bestelle ich an einer Bar?",
+      "Was war die schlechteste und beste Idee, die ich je hatte?",
+      "Wann warst du von mir am meisten enttäuscht?",
+      "Bin ich ein Keks-, Eis- oder Kuchen-Mensch?",
+      "Wann war das letzte Mal, dass du von mir beeindruckt warst?",
+      "Was liebe ich an uns?",
+      "Was ist meine liebste Erinnerung?",
+      "Welchen fiktiven BFFs sind wir am ähnlichsten?",
+      "Wenn wir auf einer einsamen Insel festsitzen, warum wäre ich eine Bereicherung?",
+      "Was macht mich verrückt?",
+      "Was ist das Schlimmste, was mir je passiert ist?",
+      "Wenn ich Präsident*in wäre, was wäre meine erste Amtshandlung?",
+      "Nenne drei Dinge, über die wir uns zu 100 % einig sind.",
+      "Gibt es einen Geruch, der dich an mich erinnert?",
+      "Was musst du machen, um mich zum Lachen zu bringen?",
+      "In welcher Game- oder Realityshow wäre ich gerne?",
+      "Warum verstehen wir uns so gut?",
+      "Zu welchen Liedern singe ich im Auto am liebsten?",
+      "Welche Mode-Entscheidung war mein größter Fehler?",
+      "Stell dir vor, wir schreiben zusammen ein erotisches Buch – was wäre das erste Kapitel?",
+      "Was sollte ich als Nächstes in die Hand nehmen?",
+      "Was war mein peinlichster Moment?",
+      "Was ist unser nächster großer Urlaubsort?",
+      "Warum magst du es, mit mir zu reisen? Würdest du mich auf deinen Reisen vermissen?",
+      "Was war meine bisher größte Leistung?",
+      "Wo kannst du mich immer finden?",
+      "Wovor habe ich am meisten Angst?",
+      "Nehme ich Mode ernst oder ist es einfach nur Shopping?",
+      "Wie gehe ich mit Geld um?",
+      "Würde ich gerne ins All reisen oder lieber auf der Erde bleiben?",
+      "Was wäre anders in meinem Leben, wenn ich ein Mann oder eine Frau wäre?",
+      "Wie sähe eine perfekte Stadt aus, in der ich gerne leben würde?",
+      "Wenn ich in drei Worten zusammenfassen müsste, wonach ich mich in einer Beziehung sehne, welche wären es?",
+      "Worauf höre ich am meisten?",
+      "Was müsste ich an meinem Charakter ändern?",
+      "Wenn ich mich beruflich für einen guten Zweck einsetzen sollte, welcher wäre das?",
+      "In welche Zeit würde ich reisen, wenn ich eine Zeitmaschine ausprobieren könnte?",
+      "Wenn ich meinem zukünftigen Kind drei Dinge beibringen könnte, welche wären das?",
+      "Wer ist mein größter Feind?",
+      "Mit wem würde ich gerne essen gehen – tot oder lebendig?",
+      "Wenn ich eine Farbe wäre, welche wäre es?",
+      "Wenn ich ein Beruf wäre, welcher wäre es?",
+      "Gibt es einen Ort, an dem ich schon immer mal Sex haben wollte?",
+      "Was ist das schrägste, was ich bei einem Date je erlebt habe?",
+      "Was war mein schrägster Moment als Kind, über den ich heute lachen kann?",
+      "Was würde ich bis heute ändern, wenn ich es könnte?",
+      "Welches Vorbild hat mich am meisten beeinflusst?",
+      "Welche Kinderserie habe ich am liebsten geschaut?",
+      "Was ist mein nutzlosestes Talent?",
+      "Reagiere ich zu schnell?",
+      "Was ist die hässlichste Farbe, die je erfunden wurde?",
+      "Mit welchem Prominenten würde ich gerne tauschen und in seinem Körper aufwachen?",
+      "Was ist das seltsamste, was ich je gegessen habe?",
+      "Wäre ich lieber schlau oder hübsch?",
+      "Wäre ich eher dominant, verspielt oder zärtlich – wenn ich freie Wahl hätte?",
+      "Welcher Song darf nicht auf meiner Hochzeit fehlen?",
+      "Welcher Song sollte jedes Mal gespielt werden, wenn ich einen Raum betrete?",
+      "Wonach sollte Zahnpasta schmecken?",
+      "Was war die peinlichste Verkleidung?",
+      "Was würdest du an deinem ersten Tag malen, wenn du ein Künstler wärst?",
+      "Wenn du frei wählen könntest wo du mal leben könntest, wo wäre es?",
+      "Welche Superkraft hättest du gerne?",
+      "Welcher Spongebob Charakter wärst du?",
+      "Was steht noch auf der Bucket List?",
+      "Drei Gerüche, die du am liebsten hast?",
+      "Gibt es etwas, das du noch nie jemandem erzählt hast, aber eigentlich gerne teilen würdest?",
+      "Wirke ich auf dich eher analytisch oder kreativ?",
+      "Welche Lektion in deinem bisherigen Leben war am wertvollsten für dich?",
+      "Welche Menschen inspirieren dich?",
+      "Was ist das Beste, was du dir je für unter 50 € gekauft hast?",
+      "Was denken oft andere Menschen über dich, was aber gar nicht stimmt?",
+      "Was ist das Verrückteste, was du je getan hast?",
+      "Wie wäre ein Mensch, der das genaue Gegenteil von dir ist?",
+      "Was war der schlechteste Tipp, den du je erhalten hast?",
+      "Wenn du in einer Crew sein könntest von One Piece, welche wäre es?",
+      "Was wärst du in One Piece?",
+      "Auto oder Motorrad?",
+      "Yacht oder Hubschrauber?",
+      "Ein Botschafterkind zu sein oder für immer in einer Hood leben?",
+      "Top 3 Lieblingscharaktere aus One Piece? Außer Zoro",
+      "Wenn du in einem Arc bei One Piece mitspielen könntest, welcher wäre es?",
+      "Welche Werte sind dir in einer langfristigen Partnerschaft wichtig?",
+      "Was war dein erster Eindruck von mir – und hat er sich verändert?",
+      "Woran merkst du, dass du verliebt bist?",
+      "Wenn wir in einem Film wären – wer wäre der chaotische Part von uns beiden?",
+      "Wie wichtig ist dir Unabhängigkeit in einer Beziehung?",
+      "Wie viel Freiraum brauchst du in einer Beziehung?",
+      "Gibt es etwas, das du noch nie jemandem erzählt hast – aber mir erzählen würdest?",
+      "Was bedeutet für dich ‚guter Sex‘ – geht’s dir eher um Technik, Gefühl oder Verbindung?",
+      "Wenn ich ein Gemüse wäre, welches wäre ich – und warum genau das?!",
+      "Wie würden wir heißen, wenn wir einen gemeinsamen Instagram-Influencer-Account hätten?",
+      "Was ist dein aktuelles Lieblingszitat?",
+      "Was ist dein aktuelles Lieblingssong?",
+      "Was regt dich jetzt gerade in diesem Moment am meisten auf?",
+      "Welche Tätigkeit hast du zuletzt gemacht, die dich glücklich gemacht hat?",
+      "Wenn dir jemand an den Hintern packt, was wäre deine erste Reaktion?",
+      "Was wäre dein Ziel für dein erstes Auto?",
+      "Wenn du ein Stein wärst, welcher wäre es?",
+      "Wenn du ein Tier wärst, welche Art? (Fliegen, Boden, Wasser)",
+      "Stell dir vor, du hattest einen Mobber als Kind und kannst dich rächen, wie würdest du es anstellen?",
+      "Was würdest du gern mit mir ausprobieren, wenn du ganz ehrlich bist?",
+      "Wie sähe deine Hochzeit aus?",
+      "Was ist das Dümmste, das wir zusammen tun könnten – und trotzdem Spaß hätten?",
+      "Welche Teufelsfrucht hättest du gerne?",
+      "Wenn du Chirurg wärst, für welche Fachrichtung würdest du dich entscheiden?",
+      "Stell dir vor, du hast einen großen Fehler gemacht, wie ist deine Reaktion?",
+      "Wenn du einen Raub planen würdest, wie würdest du es angehen, was würdest du stehlen?",
+      "Fängst du random ein Gespräch mit Fremden an?",
+      "Wenn du einen Film drehen könntest, auf welches Genre würdest du dich beziehen?",
+      "Hast du ein Sinn für Gerechtigkeit oder eher für Recht?",
+      "Was zieht dich bei einem Mann oder einer Frau an?",
+      "Welche ist deine wildeste Sexfantasie?",
+      "Wie weit würdest du gehen, um eine andere Person für dich zu gewinnen?",
+      "Was bedeutet dir unsere Beziehung?",
+      "Stell dir vor, du könntest ein Gesetz ändern oder neu aufsetzen, welches wäre es?",
+      "Was ist dein Lieblingsfilm?",
+      "Gibt es ein Tattoo, das du sehr gerne hast und auch an mir sehen könntest?",
+      "Wie wirke ich auf dich?",
+      "Was wäre dein absoluter Traumberuf?",
+      "Was für YouTube-Videos guckst du, um so richtig zu entspannen, also so therapie-mäßig?",
+      "Welche Rolle spielt Lust für dich im Alltag – brauchst du sie regelmäßig oder spontan?",
+      "Wenn du ab morgen eine Sprache fließend sprechen könntest, welche wäre das?",
+      "Was für ein Corona-Hobby hattest du?",
+      "Wenn du eine Sache oder einen Abschnitt in deinem Leben neu wiederholen könntest, welche oder welcher wäre das?",
+      "Wenn du einer Person die lustigste und die traurigste Geschichte über dich erzählen müsstest, welche wären diese?",
+      "Auf der Straße zanken sich zwei, würdest du dazwischen gehen?",
+      "Würdest du dich für eine andere Person vor einem fahrenden Bus werfen?",
+      "Würdest du es im Auto treiben?",
+      "Gibst du Geschenke auch zurück?",
+      "Welcher Charakter wärst du bei Modern Family?",
+      "Wenn du ein sinnloses Bakterium wärst, welches wäre es?",
+      "Welchen Tanz willst du mal lernen?",
+      "Wenn Spaghetti ein Geräusch machen würde beim Waschen, wie würde das klingen?",
+      "Glaubst du, Kühe wundern sich, warum wir ihre Milch trinken, anstatt selbst Käse zu machen?",
+      "Was in deinem Leben ist echt und was glaubst du, spielst du nur für andere?",
+      "Glaubst du, Menschen können sich von Grund auf ändern?",
+      "Wenn Tiere sprechen könnten, welches Tier wäre deiner Meinung nach der unhöflichste Gesprächspartner?",
+      "Wenn du bei Herr der Elemente wärst, welches Element willst du beherrschen?",
+      "Roastest du gerne andere Menschen?",
+      "Hast du früher andere gemobbt?",
+      "Stell dir vor, du leitest eine Schule, welche Fächer würdest du umgestalten?",
+      "Stell dir vor, wir machen Schluss, aber durch etwas Willkürliches: Ich gehe dir fremd auf einer Reise, sobald ich zurück bin, vertragen wir uns. A. Bist du sauer, dass ich mit jemandem geschlafen habe? B. Bist du sauer, dass ich es dir nicht erzählt habe?",
+      "Stell dir vor, du bist Single und von deinem besten Freund ist die Frau auch Single. Dein Freund ist gestorben und du verliebst dich in sie. Für dich fein?",
+      "Dirty Talk oder lieber schweigen und spüren?"
+    ];
+
+   function zeigeFrage() {
+      const nummer = document.getElementById("nummerInput").value;
+      const frageBox = document.getElementById("frageBox");
+      if (nummer >= 1 && nummer <= fragen.length) {
+        frageBox.innerHTML = `
+          <div class="karte">
+            <h2>Frage ${nummer}</h2>
+            <p>${fragen[nummer - 1]}</p>
+          </div>
+        `;
+      } else {
+       frageBox.innerHTML = "❌ Diese Nummer gibt es nicht!";
+      }
+    }
+
+    function zufallsFrage() {
+      const randomIndex = Math.floor(Math.random() * fragen.length);
+      const frageBox = document.getElementById("frageBox");
+      frageBox.innerHTML = `
+        <div class="karte">
+          <h2>Frage ${randomIndex + 1}</h2>
+          <p>${fragen[randomIndex]}</p>
+        </div>
+      `;
+    }
+
+    const grid = document.getElementById("fragenGrid");
+    fragen.forEach((frage, i) => {
+      const card = document.createElement("div");
+      card.className = "karte";
+      card.innerHTML = `
+        <p>Frage ${i+1}: ${frage}</p>
+      `;
+      grid.appendChild(card);
+    });
+
+    var acc = document.getElementsByClassName("accordion");
+
+    for (let i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling; 
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+
+  </script>
+</body>
+</html>
